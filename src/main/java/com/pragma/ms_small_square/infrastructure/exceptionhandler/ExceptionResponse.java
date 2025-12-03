@@ -5,6 +5,9 @@ import lombok.Getter;
 @Getter
 public enum ExceptionResponse {
     INVALID_OWNER_ROLE("The user does not have the owner role."),
+    RESTAURANT_NOT_FOUND("The restaurant was not found."),
+    DISH_NOT_FOUND("The dish was not found."),
+    DISH_CATEGORY_NOT_FOUND("The dish category was not found."),
     REST_CLIENT("Error querying data from the user microservice.");
 
     private final String message;

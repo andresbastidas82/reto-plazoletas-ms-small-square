@@ -1,6 +1,7 @@
 package com.pragma.ms_small_square.domain.usecase;
 
 import com.pragma.ms_small_square.domain.api.IRestaurantServicePort;
+import com.pragma.ms_small_square.domain.exception.RestaurantNotFoundException;
 import com.pragma.ms_small_square.domain.model.Restaurant;
 import com.pragma.ms_small_square.domain.spi.IRestaurantPersistencePort;
 import com.pragma.ms_small_square.domain.spi.IUserClientPort;
@@ -22,5 +23,14 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             throw new InvalidOwnerRoleException();
         }
         return restaurantPersistencePort.saveRestaurant(restaurant);
+    }
+
+    @Override
+    public Restaurant getRestaurantById(Long id) {
+        Restaurant restaurant = restaurantPersistencePort.getRestaurantById(id);
+        if (restaurant == null) {
+            throw new RestaurantNotFoundException();
+        }
+        return restaurant;
     }
 }

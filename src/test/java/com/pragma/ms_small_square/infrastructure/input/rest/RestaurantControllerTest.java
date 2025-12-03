@@ -3,8 +3,8 @@ package com.pragma.ms_small_square.infrastructure.input.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pragma.ms_small_square.application.dto.RestaurantRequest;
 import com.pragma.ms_small_square.application.handler.IRestaurantHandler;
+import com.pragma.ms_small_square.domain.exception.UserNotOwnerException;
 import com.pragma.ms_small_square.infrastructure.configuration.TestSecurityConfig;
-import com.pragma.ms_small_square.infrastructure.exception.InvalidOwnerRoleException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -102,7 +102,7 @@ class RestaurantControllerTest {
 
         // Configurar el mock para que lance una excepción de negocio
         // Esto simula el caso en que el UseCase determina que el ownerId no es válido
-        doThrow(new InvalidOwnerRoleException())
+        doThrow(new UserNotOwnerException())
                 .when(restaurantHandler).saveRestaurant(any(RestaurantRequest.class));
 
         // Act & Assert: Realizar la petición y esperar el estado 403 (Badrequest
