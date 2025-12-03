@@ -1,5 +1,7 @@
 server:
-  port: 8090
+  port: 8091
+  servlet:
+    contextPath: /v1/small-square
 
 spring:
   datasource:
@@ -12,5 +14,8 @@ spring:
       ddl-auto: update
 
 
-appDescription: "Reto plazoletas ms plazoleta"
+appDescription: "Reto plazoletas - ms plazoleta"
 appVersion: "1.0.0"
+
+url-base:
+  ms-users: http://localhost:8090/v1/users
