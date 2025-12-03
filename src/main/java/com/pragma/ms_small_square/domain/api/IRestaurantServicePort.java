@@ -7,4 +7,7 @@ public interface IRestaurantServicePort {
 
     Restaurant saveRestaurant(Restaurant restaurant);
 
+    Restaurant getRestaurantById(Long id);
+
+
 }

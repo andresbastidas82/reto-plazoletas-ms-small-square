@@ -1,8 +1,11 @@
 package com.pragma.ms_small_square.infrastructure.exceptionhandler;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.pragma.ms_small_square.domain.exception.RestaurantNotFoundException;
+import com.pragma.ms_small_square.domain.exception.UserNotOwnerException;
+import com.pragma.ms_small_square.domain.model.enums.DishCategoryEnum;
+import com.pragma.ms_small_square.infrastructure.exception.DishCategoryNotFounException;
 import com.pragma.ms_small_square.infrastructure.exception.RestClientException;
-import com.pragma.ms_small_square.infrastructure.exception.InvalidOwnerRoleException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -40,9 +43,9 @@ public class ControllerAdvisor {
         return ResponseEntity.badRequest().body(error);
     }
 
-    @ExceptionHandler(InvalidOwnerRoleException.class)
-    public ResponseEntity<Map<String, List<String>>> handleInvalidOwnerRoleException(
-            InvalidOwnerRoleException invalidOwnerRoleException) {
+    @ExceptionHandler(UserNotOwnerException.class)
+    public ResponseEntity<Map<String, List<String>>> handleUserNotOwnerException(
+            UserNotOwnerException userNotOwnerException) {
         Map<String, List<String>> errors = new HashMap<>();
         errors.put(ERRORS, List.of(ExceptionResponse.INVALID_OWNER_ROLE.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
@@ -54,5 +57,22 @@ public class ControllerAdvisor {
         Map<String, List<String>> errors = new HashMap<>();
         errors.put(ERRORS, List.of(ExceptionResponse.REST_CLIENT.getMessage(), restClientException.getMessage()));
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errors);
+    }
+
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleRestaurantNotFoundException(
+            RestaurantNotFoundException restaurantNotFoundException) {
+        Map<String, List<String>> errors = new HashMap<>();
+        errors.put(ERRORS, List.of(ExceptionResponse.RESTAURANT_NOT_FOUND.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
+    }
+
+    @ExceptionHandler(DishCategoryNotFounException.class)
+    public ResponseEntity<Map<String, List<String>>> handleDishCategoryNotFoundException(
+            DishCategoryNotFounException dishCategoryNotFounException) {
+        Map<String, List<String>> errors = new HashMap<>();
+        errors.put(ERRORS, List.of(ExceptionResponse.DISH_CATEGORY_NOT_FOUND.getMessage(),
+                    "Allowed categories: " + DishCategoryEnum.getCategoriesAsString()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
 }
