@@ -19,9 +19,9 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     @Override
     public Restaurant saveRestaurant(Restaurant restaurant) {
-        if (!userClientPort.isOwner(restaurant.getOwnerId())) {
+        /*if (!userClientPort.isOwner(restaurant.getOwnerId())) {
             throw new InvalidOwnerRoleException();
-        }
+        }*/
         return restaurantPersistencePort.saveRestaurant(restaurant);
     }
 
