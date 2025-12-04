@@ -1,6 +1,7 @@
 package com.pragma.ms_small_square.domain.usecase;
 
 import com.pragma.ms_small_square.domain.api.IDishServicePort;
+import com.pragma.ms_small_square.domain.exception.DishNotFoundException;
 import com.pragma.ms_small_square.domain.exception.UserNotOwnerException;
 import com.pragma.ms_small_square.domain.model.Dish;
 import com.pragma.ms_small_square.domain.spi.IDishPersistencePort;
@@ -22,5 +23,14 @@ public class DishUseCase implements IDishServicePort {
             throw new UserNotOwnerException();
         }
         return dishPersistencePort.saveDish(dish);
+    }
+
+    @Override
+    public Dish getDishById(Long id) {
+        Dish dish = dishPersistencePort.getDishById(id);
+        if (dish == null) {
+            throw new DishNotFoundException();
+        }
+        return dish;
     }
 }
