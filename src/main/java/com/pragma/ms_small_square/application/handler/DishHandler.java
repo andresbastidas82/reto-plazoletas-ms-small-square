@@ -8,8 +8,11 @@ import com.pragma.ms_small_square.domain.api.IDishServicePort;
 import com.pragma.ms_small_square.domain.api.IRestaurantServicePort;
 import com.pragma.ms_small_square.domain.model.Dish;
 import com.pragma.ms_small_square.domain.model.Restaurant;
+import com.pragma.ms_small_square.infrastructure.exception.UserIsNotOwnerOfRestaurantException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,9 @@ public class DishHandler implements IDishHandler {
     @Override
     public DishResponse saveDish(DishRequest dishRequest) {
         Restaurant restaurant = restaurantServicePort.getRestaurantById(dishRequest.getRestaurantId());
+        if(!Objects.equals(restaurant.getOwnerId(), dishRequest.getOwnerId())) {
+            throw new UserIsNotOwnerOfRestaurantException();
+        }
         Dish dish = dishRequestMapper.toDish(dishRequest);
         dish.setRestaurant(restaurant);
         dish.setState(Boolean.TRUE);

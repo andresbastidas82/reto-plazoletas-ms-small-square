@@ -19,9 +19,6 @@ public class DishUseCase implements IDishServicePort {
 
     @Override
     public Dish saveDish(Dish dish) {
-        if (!userClientPort.isOwner(dish.getOwnerId())) {
-            throw new UserNotOwnerException();
-        }
         return dishPersistencePort.saveDish(dish);
     }
 
