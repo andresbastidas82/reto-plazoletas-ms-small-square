@@ -5,6 +5,7 @@ import com.pragma.ms_small_square.domain.exception.RestaurantNotFoundException;
 import com.pragma.ms_small_square.domain.exception.UserNotOwnerException;
 import com.pragma.ms_small_square.domain.model.enums.DishCategoryEnum;
 import com.pragma.ms_small_square.infrastructure.exception.DishCategoryNotFounException;
+import com.pragma.ms_small_square.infrastructure.exception.ErrorRequestException;
 import com.pragma.ms_small_square.infrastructure.exception.RestClientException;
 import com.pragma.ms_small_square.infrastructure.exception.UserIsNotOwnerOfRestaurantException;
 import lombok.extern.slf4j.Slf4j;
@@ -106,5 +107,13 @@ public class ControllerAdvisor {
         Map<String, List<String>> errors = new HashMap<>();
         errors.put(ERRORS, List.of("An unexpected error occurred: " + ex.getMessage(), ((ServletWebRequest) request).getRequest().getRequestURI()));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
+    }
+
+    @ExceptionHandler(ErrorRequestException.class)
+    public ResponseEntity<Map<String, List<String>>> handleErrorRequestException(
+            ErrorRequestException errorRequestException) {
+        Map<String, List<String>> errors = new HashMap<>();
+        errors.put(ERRORS, List.of(errorRequestException.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 }

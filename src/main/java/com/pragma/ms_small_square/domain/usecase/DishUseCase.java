@@ -2,7 +2,6 @@ package com.pragma.ms_small_square.domain.usecase;
 
 import com.pragma.ms_small_square.domain.api.IDishServicePort;
 import com.pragma.ms_small_square.domain.exception.DishNotFoundException;
-import com.pragma.ms_small_square.domain.exception.UserNotOwnerException;
 import com.pragma.ms_small_square.domain.model.Dish;
 import com.pragma.ms_small_square.domain.spi.IDishPersistencePort;
 import com.pragma.ms_small_square.domain.spi.IUserClientPort;

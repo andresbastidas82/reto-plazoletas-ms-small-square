@@ -9,4 +9,6 @@ public interface IDishHandler {
     DishResponse saveDish(DishRequest dishRequest);
 
     DishResponse updateDish(Long id, DishUpdateRequest dishUpdateRequest);
+
+    DishResponse updateStateDish(Long id, String state);
 }

@@ -1,6 +1,5 @@
 package com.pragma.ms_small_square.infrastructure.security;
 
-import io.jsonwebtoken.Claims;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

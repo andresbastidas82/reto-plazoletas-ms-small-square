@@ -37,6 +37,5 @@ public class DishRequest {
     @NotNull(message = "The restaurant ID is required")
     private Long restaurantId;
 
-    @NotNull(message = "The owner user ID is required")
     private Long ownerId;
 }

@@ -29,7 +29,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         Map<String, List<String>> error = new HashMap<>();
         // Mensaje claro para el cliente de la API
-        error.put("errors", List.of("Authentication token is missing or invalid."));
+        error.put("errors", List.of("Authentication token is missing or invalid.", authException.getMessage()));
 
         response.getWriter().write(objectMapper.writeValueAsString(error));
     }
