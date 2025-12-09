@@ -4,11 +4,13 @@ import com.pragma.ms_small_square.domain.api.IDishServicePort;
 import com.pragma.ms_small_square.domain.exception.DishNotFoundException;
 import com.pragma.ms_small_square.domain.model.Dish;
 import com.pragma.ms_small_square.domain.model.Restaurant;
+import com.pragma.ms_small_square.domain.model.enums.DishCategoryEnum;
 import com.pragma.ms_small_square.domain.spi.IAuthenticationServicePort;
 import com.pragma.ms_small_square.domain.spi.IDishPersistencePort;
 import com.pragma.ms_small_square.domain.exception.ErrorRequestException;
 import com.pragma.ms_small_square.domain.exception.UserIsNotOwnerOfRestaurantException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -61,6 +63,11 @@ public class DishUseCase implements IDishServicePort {
             throw new DishNotFoundException();
         }
         return dish;
+    }
+
+    @Override
+    public Page<Dish> getDishesByRestaurant(Long restaurantId, DishCategoryEnum category, int page, int size) {
+        return dishPersistencePort.getDishesByRestaurant(restaurantId, category, page, size);
     }
 
     private void validateUserIsOwnerOfRestaurant(Long userIdOfRestaurant, Long userIdToken) {

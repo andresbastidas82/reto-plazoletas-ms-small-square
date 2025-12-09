@@ -1,5 +1,6 @@
 package com.pragma.ms_small_square.domain.model.enums;
 
+import com.pragma.ms_small_square.infrastructure.exception.DishCategoryNotFounException;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -30,6 +31,14 @@ public enum DishCategoryEnum {
         return Arrays.stream(DishCategoryEnum.values())
                 .map(item -> item.name() + " (" + item.getName() + ")")
                 .collect(Collectors.joining(", "));
+    }
+
+    public static DishCategoryEnum getDishCategory(String name) {
+        try{
+            return DishCategoryEnum.valueOf(name);
+        } catch (Exception e){
+            throw new DishCategoryNotFounException();
+        }
     }
 
 }
