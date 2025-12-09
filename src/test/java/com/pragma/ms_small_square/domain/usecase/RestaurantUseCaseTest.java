@@ -2,7 +2,6 @@ package com.pragma.ms_small_square.domain.usecase;
 
 import com.pragma.ms_small_square.domain.model.Restaurant;
 import com.pragma.ms_small_square.domain.spi.IRestaurantPersistencePort;
-import com.pragma.ms_small_square.domain.spi.IUserClientPort;
 import com.pragma.ms_small_square.infrastructure.exception.InvalidOwnerRoleException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,15 +19,15 @@ class RestaurantUseCaseTest {
     @Mock
     private IRestaurantPersistencePort restaurantPersistencePort;
 
-    @Mock
-    private IUserClientPort userClientPort;
+    /*@Mock
+    private IUserClientPort userClientPort;*/
 
     private RestaurantUseCase restaurantUseCase;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort, userClientPort);
+        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort);
     }
 
     @Test
@@ -36,7 +35,7 @@ class RestaurantUseCaseTest {
         // Arrange
         Restaurant restaurant = new Restaurant();
         restaurant.setOwnerId(1L);
-        when(userClientPort.isOwner(1L)).thenReturn(true);
+        //when(userClientPort.isOwner(1L)).thenReturn(true);
         when(restaurantPersistencePort.saveRestaurant(restaurant)).thenReturn(restaurant);
 
         // Act
@@ -44,7 +43,7 @@ class RestaurantUseCaseTest {
 
         // Assert
         assertNotNull(savedRestaurant);
-        verify(userClientPort).isOwner(1L);
+        //verify(userClientPort).isOwner(1L);
         verify(restaurantPersistencePort).saveRestaurant(restaurant);
     }
 
@@ -53,11 +52,11 @@ class RestaurantUseCaseTest {
         // Arrange
         Restaurant restaurant = new Restaurant();
         restaurant.setOwnerId(1L);
-        when(userClientPort.isOwner(1L)).thenReturn(false);
+        //when(userClientPort.isOwner(1L)).thenReturn(false);
 
         // Act & Assert
         assertThrows(InvalidOwnerRoleException.class, () -> restaurantUseCase.saveRestaurant(restaurant));
-        verify(userClientPort).isOwner(1L);
+        //verify(userClientPort).isOwner(1L);
         verify(restaurantPersistencePort, never()).saveRestaurant(any());
     }
 }

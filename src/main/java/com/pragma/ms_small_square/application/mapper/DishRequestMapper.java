@@ -1,7 +1,8 @@
 package com.pragma.ms_small_square.application.mapper;
 
-import com.pragma.ms_small_square.application.dto.DishRequest;
-import com.pragma.ms_small_square.application.dto.DishResponse;
+import com.pragma.ms_small_square.application.dto.request.DishRequest;
+import com.pragma.ms_small_square.application.dto.response.DishResponse;
+import com.pragma.ms_small_square.application.dto.request.DishUpdateRequest;
 import com.pragma.ms_small_square.domain.model.Dish;
 import com.pragma.ms_small_square.domain.model.enums.DishCategoryEnum;
 import com.pragma.ms_small_square.infrastructure.exception.DishCategoryNotFounException;
@@ -22,6 +23,8 @@ public interface DishRequestMapper {
     @Mapping(target = "category", qualifiedByName = "showCategoyEnum")
     @Mapping(target = "state", qualifiedByName = "getDishState")
     DishResponse toDishResponse(Dish dish);
+
+    Dish toDishUpdate(DishUpdateRequest dishUpdateRequest);
 
     @Named("getDishState")
     default String getDishState(Boolean state) {

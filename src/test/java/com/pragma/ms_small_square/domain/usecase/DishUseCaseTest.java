@@ -56,7 +56,7 @@ class DishUseCaseTest {
         when(dishPersistencePort.saveDish(dishToSave)).thenReturn(dishToSave);
 
         // Act: Llamar al metodo que se está probando
-        Dish savedDish = dishUseCase.saveDish(dishToSave);
+        Dish savedDish = dishUseCase.saveDish(dishToSave, ownerRestaurant);
 
         // Assert: Verificar los resultados y las interacciones
         assertNotNull(savedDish);
@@ -69,7 +69,7 @@ class DishUseCaseTest {
     void saveDish_whenUserIsNotOwnerOfRestaurant_shouldThrowUserNotOwnerException() {
         // Act & Assert: Verificar que se lanza la excepción correcta
         assertThrows(UserNotOwnerException.class, () -> {
-            dishUseCase.saveDish(dishToSave);
+            dishUseCase.saveDish(dishToSave, ownerRestaurant);
         });
 
         // Verificar que NUNCA se intentó guardar el plato

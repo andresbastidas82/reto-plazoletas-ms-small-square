@@ -1,8 +1,8 @@
 package com.pragma.ms_small_square.infrastructure.input.rest;
 
-import com.pragma.ms_small_square.application.dto.DishRequest;
-import com.pragma.ms_small_square.application.dto.DishResponse;
-import com.pragma.ms_small_square.application.dto.DishUpdateRequest;
+import com.pragma.ms_small_square.application.dto.request.DishRequest;
+import com.pragma.ms_small_square.application.dto.response.DishResponse;
+import com.pragma.ms_small_square.application.dto.request.DishUpdateRequest;
 import com.pragma.ms_small_square.application.handler.IDishHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +31,12 @@ public class DishController {
 
     @PutMapping("/update-dish/{id}")
     public ResponseEntity<DishResponse> updateDish(@PathVariable Long id, @Valid @RequestBody DishUpdateRequest dishRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(dishHandler.updateDish(id, dishRequest));
+        return ResponseEntity.status(HttpStatus.OK).body(dishHandler.updateDish(id, dishRequest));
     }
 
     @GetMapping("/update-status-dish/{id}")
-    public ResponseEntity<DishResponse> updateStateDish(@PathVariable("id") Long id, @RequestParam String state) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(dishHandler.updateStateDish(id, state));
+    public ResponseEntity<DishResponse> updateStateDish(@PathVariable("id") Long id, @RequestParam Boolean state) {
+        return ResponseEntity.status(HttpStatus.OK).body(dishHandler.updateStateDish(id, state));
     }
 
 }

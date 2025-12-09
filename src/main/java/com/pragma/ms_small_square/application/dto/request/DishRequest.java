@@ -1,4 +1,4 @@
-package com.pragma.ms_small_square.application.dto;
+package com.pragma.ms_small_square.application.dto.request;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
