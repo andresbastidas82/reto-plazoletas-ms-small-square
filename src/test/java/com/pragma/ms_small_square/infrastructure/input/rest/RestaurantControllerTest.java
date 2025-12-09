@@ -1,7 +1,7 @@
 package com.pragma.ms_small_square.infrastructure.input.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pragma.ms_small_square.application.dto.RestaurantRequest;
+import com.pragma.ms_small_square.application.dto.request.RestaurantRequest;
 import com.pragma.ms_small_square.application.handler.IRestaurantHandler;
 import com.pragma.ms_small_square.domain.exception.UserNotOwnerException;
 import com.pragma.ms_small_square.infrastructure.configuration.TestSecurityConfig;

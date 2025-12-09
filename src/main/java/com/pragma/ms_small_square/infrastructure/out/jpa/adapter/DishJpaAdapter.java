@@ -1,13 +1,14 @@
 package com.pragma.ms_small_square.infrastructure.out.jpa.adapter;
 
-import com.pragma.ms_small_square.domain.exception.RestaurantNotFoundException;
 import com.pragma.ms_small_square.domain.model.Dish;
 import com.pragma.ms_small_square.domain.spi.IDishPersistencePort;
 import com.pragma.ms_small_square.infrastructure.out.jpa.entity.DishEntity;
 import com.pragma.ms_small_square.infrastructure.out.jpa.mapper.DishEntityMapper;
 import com.pragma.ms_small_square.infrastructure.out.jpa.repository.IDishRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class DishJpaAdapter implements IDishPersistencePort {
 

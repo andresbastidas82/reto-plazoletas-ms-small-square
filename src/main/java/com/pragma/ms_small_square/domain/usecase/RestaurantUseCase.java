@@ -4,24 +4,18 @@ import com.pragma.ms_small_square.domain.api.IRestaurantServicePort;
 import com.pragma.ms_small_square.domain.exception.RestaurantNotFoundException;
 import com.pragma.ms_small_square.domain.model.Restaurant;
 import com.pragma.ms_small_square.domain.spi.IRestaurantPersistencePort;
-import com.pragma.ms_small_square.domain.spi.IUserClientPort;
-import com.pragma.ms_small_square.infrastructure.exception.InvalidOwnerRoleException;
+import org.springframework.data.domain.Page;
 
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
-    private final IUserClientPort userClientPort;
 
-    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IUserClientPort userClientPort) {
+    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort) {
         this.restaurantPersistencePort = restaurantPersistencePort;
-        this.userClientPort = userClientPort;
     }
 
     @Override
     public Restaurant saveRestaurant(Restaurant restaurant) {
-        /*if (!userClientPort.isOwner(restaurant.getOwnerId())) {
-            throw new InvalidOwnerRoleException();
-        }*/
         return restaurantPersistencePort.saveRestaurant(restaurant);
     }
 
@@ -32,5 +26,10 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             throw new RestaurantNotFoundException();
         }
         return restaurant;
+    }
+
+    @Override
+    public Page<Restaurant> getRestaurants(Integer page, Integer size) {
+        return restaurantPersistencePort.getRestaurants(page, size);
     }
 }

@@ -1,4 +1,4 @@
-package com.pragma.ms_small_square.application.dto;
+package com.pragma.ms_small_square.application.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
