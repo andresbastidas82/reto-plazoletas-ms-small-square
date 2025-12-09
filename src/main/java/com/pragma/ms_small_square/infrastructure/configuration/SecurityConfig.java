@@ -34,7 +34,9 @@ public class SecurityConfig {
 
                 // 4. Definir reglas de autorización para las rutas.
                 .authorizeHttpRequests(auth -> auth
+                        // Rutas públicas sin autenticación.
                         .requestMatchers("/api/v1/small-square/get-restaurants").permitAll()
+                        .requestMatchers("/api/v1/small-square/dishes-by-restaurant").permitAll()
                         // Rutas para Propietarios (OWNER)
                         .requestMatchers("/api/v1/small-square/create-restaurant").hasRole("OWNER")
                         .requestMatchers("/api/v1/small-square/create-dish").hasRole("OWNER")

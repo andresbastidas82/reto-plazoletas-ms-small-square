@@ -9,7 +9,9 @@ import com.pragma.ms_small_square.domain.api.IDishServicePort;
 import com.pragma.ms_small_square.domain.api.IRestaurantServicePort;
 import com.pragma.ms_small_square.domain.model.Dish;
 import com.pragma.ms_small_square.domain.model.Restaurant;
+import com.pragma.ms_small_square.domain.model.enums.DishCategoryEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,6 +43,16 @@ public class DishHandler implements IDishHandler {
         Dish dish = dishServicePort.getDishById(id);
         Dish dishSaved = dishServicePort.updateStateDish(dish, state);
         return dishRequestMapper.toDishResponse(dishSaved);
+    }
+
+    @Override
+    public Page<DishResponse> getDishesByRestaurant(Long restaurantId, String category, int page, int size) {
+        DishCategoryEnum categoryEnum = null;
+        if (category != null) {
+            categoryEnum = DishCategoryEnum.getDishCategory(category);
+        }
+        Page<Dish> dishPage = dishServicePort.getDishesByRestaurant(restaurantId, categoryEnum, page, size);
+        return dishPage.map(dishRequestMapper::toDishResponse);
     }
 
 }
