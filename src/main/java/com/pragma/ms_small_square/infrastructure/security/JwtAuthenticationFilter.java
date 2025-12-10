@@ -65,9 +65,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 // 3. Extraer los datos del usuario del objeto anidado
                 Long userId = userData.get("id") != null ? Long.valueOf(userData.get("id").toString()) : null;
                 String userName = userData.get("name") != null ? userData.get("name").toString() : null;
+                Long restaurantId = userData.get("restaurantId") != null ? Long.valueOf(userData.get("restaurantId").toString()) : null;
 
                 // 4. Crear el objeto UserPrincipal con todos los datos
-                UserPrincipal principal = new UserPrincipal(userId, userName, userEmail);
+                UserPrincipal principal = new UserPrincipal(userId, userName, userEmail, restaurantId);
 
                 // 5. Convertir roles a autoridades
                 List<SimpleGrantedAuthority> authorities = roles.stream()

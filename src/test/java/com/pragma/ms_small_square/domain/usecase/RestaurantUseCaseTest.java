@@ -1,6 +1,7 @@
 package com.pragma.ms_small_square.domain.usecase;
 
 import com.pragma.ms_small_square.domain.model.Restaurant;
+import com.pragma.ms_small_square.domain.spi.IAuthenticationServicePort;
 import com.pragma.ms_small_square.domain.spi.IRestaurantPersistencePort;
 import com.pragma.ms_small_square.infrastructure.exception.InvalidOwnerRoleException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,9 @@ class RestaurantUseCaseTest {
     @Mock
     private IRestaurantPersistencePort restaurantPersistencePort;
 
+    @Mock
+    private IAuthenticationServicePort authenticationServicePort;
+
     /*@Mock
     private IUserClientPort userClientPort;*/
 
@@ -27,7 +31,7 @@ class RestaurantUseCaseTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort);
+        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort, authenticationServicePort);
     }
 
     @Test

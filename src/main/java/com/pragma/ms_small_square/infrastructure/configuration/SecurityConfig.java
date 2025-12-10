@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/dish/list-by-restaurant/**").hasRole("CLIENT")
 
                         // Rutas para Empleados (EMPLOYEE)
-                        .requestMatchers("/api/v1/order/list-by-status").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/v1/small-square/orders-by-state").hasRole("EMPLOYEE")
                         .requestMatchers("/api/v1/order/assign-order/**").hasRole("EMPLOYEE")
 
                         // Cualquier otra petición requiere que el usuario esté autenticado.

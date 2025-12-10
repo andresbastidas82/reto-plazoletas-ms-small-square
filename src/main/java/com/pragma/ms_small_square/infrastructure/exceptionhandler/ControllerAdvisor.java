@@ -1,10 +1,12 @@
 package com.pragma.ms_small_square.infrastructure.exceptionhandler;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.pragma.ms_small_square.domain.exception.OrderStateNotFoundException;
 import com.pragma.ms_small_square.domain.exception.RestaurantNotFoundException;
 import com.pragma.ms_small_square.domain.exception.UserNotOwnerException;
 import com.pragma.ms_small_square.domain.exception.UserPendingOrdersException;
 import com.pragma.ms_small_square.domain.model.enums.DishCategoryEnum;
+import com.pragma.ms_small_square.domain.model.enums.OrderStateEnum;
 import com.pragma.ms_small_square.infrastructure.exception.DishCategoryNotFounException;
 import com.pragma.ms_small_square.domain.exception.ErrorRequestException;
 import com.pragma.ms_small_square.infrastructure.exception.RestClientException;
@@ -124,5 +126,14 @@ public class ControllerAdvisor {
         Map<String, List<String>> errors = new HashMap<>();
         errors.put(ERRORS, List.of(userPendingOrdersException.getMessage()));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errors);
+    }
+
+    @ExceptionHandler(OrderStateNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleOrderStateNotFoundException(
+            OrderStateNotFoundException orderStateNotFoundException) {
+        Map<String, List<String>> errors = new HashMap<>();
+        errors.put(ERRORS, List.of(orderStateNotFoundException.getMessage(),
+                "Allowed values: " + OrderStateEnum.getOrderStatesAsString()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
 }

@@ -12,6 +12,7 @@ import com.pragma.ms_small_square.domain.model.Order;
 import com.pragma.ms_small_square.domain.model.OrderDetails;
 import com.pragma.ms_small_square.domain.model.Restaurant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,5 +38,10 @@ public class OrderHandler implements IOrderHandler {
         Restaurant restaurant = restaurantServicePort.getRestaurantById(orderRequest.getRestaurantId());
         Order order = orderServicePort.saveOrder(restaurant, orderDetails);
         return orderRequestMapper.toOrderResponse(order);
+    }
+
+    @Override
+    public Page<OrderResponse> getOrdersByState(String state, int page, int size) {
+        return orderServicePort.getOrdersByState(state, page, size).map(orderRequestMapper::toOrderResponse);
     }
 }
