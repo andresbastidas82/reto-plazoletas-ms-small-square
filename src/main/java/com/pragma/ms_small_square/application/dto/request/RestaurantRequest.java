@@ -34,7 +34,6 @@ public class RestaurantRequest {
     @NotBlank(message = "The logo URL is required")
     private String urlLogo;
 
-    @NotNull(message = "The owner user ID is required")
     private Long ownerId;
 
 }

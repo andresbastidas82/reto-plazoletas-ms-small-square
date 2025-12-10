@@ -8,6 +8,7 @@ import com.pragma.ms_small_square.infrastructure.out.jpa.mapper.OrderEntityMappe
 import com.pragma.ms_small_square.infrastructure.out.jpa.repository.IOrderRepository;
 import com.pragma.ms_small_square.infrastructure.out.jpa.specification.IOrderSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,6 +44,15 @@ public class OrderJpaAdapter implements IOrderPersistencePort, IOrderSpecificati
                 .stream()
                 .map(orderEntityMapper::toOrder)
                 .toList();
+    }
+
+    @Override
+    public Page<Order> getOrdersByState(OrderStateEnum state, int page, int size, Long restaurantId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Specification<OrderEntity> specs = Specification
+                .where(byRestaurantId(restaurantId))
+                .and(byStates(List.of(state)));
+        return orderRepository.findAll(specs, pageable).map(orderEntityMapper::toOrder);
     }
 
 

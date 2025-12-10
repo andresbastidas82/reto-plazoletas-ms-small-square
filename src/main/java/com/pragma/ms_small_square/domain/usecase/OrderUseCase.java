@@ -11,6 +11,7 @@ import com.pragma.ms_small_square.domain.spi.IAuthenticationServicePort;
 import com.pragma.ms_small_square.domain.spi.IOrderPersistencePort;
 import com.pragma.ms_small_square.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,13 @@ public class OrderUseCase implements IOrderServicePort {
         order.setState(OrderStateEnum.PENDING);
         order.setUser(registerCustomer());
         return orderPersistencePort.saveOrder(order);
+    }
+
+    @Override
+    public Page<Order> getOrdersByState(String state, int page, int size) {
+        OrderStateEnum orderStateEnum = OrderStateEnum.getOrderState(state);
+        Long idRestaurantToken = authenticationServicePort.getRestaurantIdOfToken();
+        return orderPersistencePort.getOrdersByState(orderStateEnum, page, size, idRestaurantToken);
     }
 
     private User registerCustomer() {

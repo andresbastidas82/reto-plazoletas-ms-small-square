@@ -25,4 +25,9 @@ public class AuthAdapter implements IAuthenticationServicePort {
     public String getEmailOfToken() {
         return principalProvider.getUserEmail();
     }
+
+    @Override
+    public Long getRestaurantIdOfToken() {
+        return principalProvider.getRestaurantId();
+    }
 }

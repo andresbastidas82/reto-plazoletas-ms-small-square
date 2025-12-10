@@ -4,4 +4,5 @@ public interface IAuthenticationServicePort {
     Long getUserIdOfToken();
     String getNameOfToken();
     String getEmailOfToken();
+    Long getRestaurantIdOfToken();
 }

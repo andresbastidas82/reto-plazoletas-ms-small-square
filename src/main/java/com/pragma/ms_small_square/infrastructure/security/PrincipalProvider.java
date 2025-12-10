@@ -21,4 +21,8 @@ public class PrincipalProvider {
     public String getUserEmail() {
         return getPrincipal().getEmail();
     }
+
+    public Long getRestaurantId() {
+        return getPrincipal().getRestaurantId();
+    }
 }

@@ -28,7 +28,10 @@ public interface OrderRequestMapper {
     List<OrderDetailsResponse> toOrderDetailResponseList(List<OrderDetails> orderDetails);
 
     // Mapeo para un solo detalle de la orden
-    @Mapping(target = "name", source = "dish", qualifiedByName = "mapDishToName")
+    @Mapping(target = "dishId", source = "dish.id")
+    @Mapping(target = "name", source = "dish.name")
+    @Mapping(target = "category", source = "dish.category")
+    @Mapping(target = "description", source = "dish.description")
     OrderDetailsResponse toOrderDetailResponse(OrderDetails orderDetail);
 
     // --- MÉTODOS PERSONALIZADOS ---
