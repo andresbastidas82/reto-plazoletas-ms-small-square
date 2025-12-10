@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/small-square/create-dish").hasRole("OWNER")
                         .requestMatchers("/api/v1/small-square/update-dish/**").hasRole("OWNER")
                         .requestMatchers("/api/v1/small-square/update-status-dish/**").hasRole("OWNER")
+                        .requestMatchers("/api/v1/small-square/create-order").hasRole("CUSTOMER")
 
                         // Rutas para Clientes (CLIENT)
                         .requestMatchers("/api/v1/dish/list-by-restaurant/**").hasRole("CLIENT")

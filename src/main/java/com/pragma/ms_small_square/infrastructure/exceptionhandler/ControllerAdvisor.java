@@ -3,6 +3,7 @@ package com.pragma.ms_small_square.infrastructure.exceptionhandler;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.pragma.ms_small_square.domain.exception.RestaurantNotFoundException;
 import com.pragma.ms_small_square.domain.exception.UserNotOwnerException;
+import com.pragma.ms_small_square.domain.exception.UserPendingOrdersException;
 import com.pragma.ms_small_square.domain.model.enums.DishCategoryEnum;
 import com.pragma.ms_small_square.infrastructure.exception.DishCategoryNotFounException;
 import com.pragma.ms_small_square.domain.exception.ErrorRequestException;
@@ -115,5 +116,13 @@ public class ControllerAdvisor {
         Map<String, List<String>> errors = new HashMap<>();
         errors.put(ERRORS, List.of(errorRequestException.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(UserPendingOrdersException.class)
+    public ResponseEntity<Map<String, List<String>>> handleUserPendingOrdersException(
+            UserPendingOrdersException userPendingOrdersException) {
+        Map<String, List<String>> errors = new HashMap<>();
+        errors.put(ERRORS, List.of(userPendingOrdersException.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errors);
     }
 }
