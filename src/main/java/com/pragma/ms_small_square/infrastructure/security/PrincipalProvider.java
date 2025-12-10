@@ -5,12 +5,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PrincipalProvider {
-    /**
-     * Obtiene el ID del usuario autenticado desde el contexto de seguridad.
-     * @return El ID del usuario (Long).
-     * @throws ClassCastException si el principal no es del tipo esperado (Long).
-     */
+    private UserPrincipal getPrincipal() {
+        return (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     public Long getUserId() {
-        return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return getPrincipal().getId();
+    }
+
+
+    public String getUserName() {
+        return getPrincipal().getName();
+    }
+
+    public String getUserEmail() {
+        return getPrincipal().getEmail();
     }
 }

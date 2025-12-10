@@ -15,4 +15,14 @@ public class AuthAdapter implements IAuthenticationServicePort {
     public Long getUserIdOfToken() {
         return principalProvider.getUserId();
     }
+
+    @Override
+    public String getNameOfToken() {
+        return principalProvider.getUserName();
+    }
+
+    @Override
+    public String getEmailOfToken() {
+        return principalProvider.getUserEmail();
+    }
 }

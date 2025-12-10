@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -46,28 +47,43 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 Claims claims = jwtService.extractAllClaims(jwt);
 
-                // Obtenemos la lista de roles del claim "roles".
+                // 1. Extraer la lista de roles
                 @SuppressWarnings("unchecked")
                 List<String> roles = claims.get("roles", List.class);
+                if (roles == null) {
+                    roles = Collections.emptyList();
+                }
 
+                // 2. Extraer el objeto "user" del token
                 Map<String, Object> userData = claims.get("user", Map.class);
-                Long userId = userData.get("id") != null ? Long.valueOf(userData.get("id").toString()) : null;
+                if (userData == null) {
+                    log.warn("JWT token is missing 'user' object claim.");
+                    filterChain.doFilter(request, response);
+                    return;
+                }
 
-                // Convertimos la lista de strings de roles a una lista de GrantedAuthority.
+                // 3. Extraer los datos del usuario del objeto anidado
+                Long userId = userData.get("id") != null ? Long.valueOf(userData.get("id").toString()) : null;
+                String userName = userData.get("name") != null ? userData.get("name").toString() : null;
+
+                // 4. Crear el objeto UserPrincipal con todos los datos
+                UserPrincipal principal = new UserPrincipal(userId, userName, userEmail);
+
+                // 5. Convertir roles a autoridades
                 List<SimpleGrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
 
-                //Creamos el token de autenticación CON los roles correctos.
+                // 6. Crear el token de autenticación usando el objeto UserPrincipal
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userId, // El "principal" ahora es solo el id del usuario
+                        principal, // <-- El principal ahora es un objeto rico en información
                         null,
-                        authorities // Usamos las autoridades extraídas del token
+                        authorities
                 );
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                log.info("User '{}' with roles {} successfully authenticated.", userEmail, roles);
+                log.info("User '{}' with ID {} and roles {} successfully authenticated.", principal.getName(), principal.getId(), roles);
             }
         } catch (Exception e) {
             log.warn("Invalid JWT Token: {}", e.getMessage());
