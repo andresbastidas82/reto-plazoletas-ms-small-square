@@ -49,6 +49,10 @@ public class OrderEntity {
     @JoinColumn(name = "customer_id", nullable = false)
     private UserEntity user; //cliente del pedido
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    private UserEntity employee; //empleado responsable del pedido
+
     private String deliveryCode;
 
     @PrePersist

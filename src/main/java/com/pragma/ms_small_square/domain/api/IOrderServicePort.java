@@ -11,4 +11,8 @@ public interface IOrderServicePort {
     Order saveOrder(Restaurant restaurant, List<OrderDetails> orderDetails);
 
     Page<Order> getOrdersByState(String state, int page, int size);
+
+    Order assignOrderToEmployee(Order order);
+
+    Order getOrderById(Long orderId);
 }

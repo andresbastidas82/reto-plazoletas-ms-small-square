@@ -1,6 +1,8 @@
 package com.pragma.ms_small_square.domain.usecase;
 
 import com.pragma.ms_small_square.domain.api.IOrderServicePort;
+import com.pragma.ms_small_square.domain.exception.ErrorRequestException;
+import com.pragma.ms_small_square.domain.exception.OrderNotFoundException;
 import com.pragma.ms_small_square.domain.exception.UserPendingOrdersException;
 import com.pragma.ms_small_square.domain.model.Order;
 import com.pragma.ms_small_square.domain.model.OrderDetails;
@@ -40,6 +42,25 @@ public class OrderUseCase implements IOrderServicePort {
         OrderStateEnum orderStateEnum = OrderStateEnum.getOrderState(state);
         Long idRestaurantToken = authenticationServicePort.getRestaurantIdOfToken();
         return orderPersistencePort.getOrdersByState(orderStateEnum, page, size, idRestaurantToken);
+    }
+
+    @Override
+    public Order assignOrderToEmployee(Order order) {
+        if(!order.getState().equals(OrderStateEnum.PENDING)) {
+            throw new ErrorRequestException("The order is not in pending state");
+        }
+        order.setEmployee(registerCustomer());
+        order.setState(OrderStateEnum.IN_PREPARATION);
+        return orderPersistencePort.saveOrder(order);
+    }
+
+    @Override
+    public Order getOrderById(Long orderId) {
+        Order order = orderPersistencePort.getOrderById(orderId);
+        if (order == null) {
+            throw new OrderNotFoundException("Order not found");
+        }
+        return order;
     }
 
     private User registerCustomer() {

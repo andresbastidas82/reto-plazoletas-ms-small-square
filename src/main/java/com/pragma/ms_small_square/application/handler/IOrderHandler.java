@@ -8,4 +8,6 @@ public interface IOrderHandler {
     OrderResponse saveOrder(OrderRequest orderRequest);
 
     Page<OrderResponse> getOrdersByState(String state, int page, int size);
+
+    OrderResponse assignOrderToEmployee(Long orderId);
 }
