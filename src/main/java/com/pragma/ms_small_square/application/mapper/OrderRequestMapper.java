@@ -20,6 +20,7 @@ public interface OrderRequestMapper {
     // Mapeo principal de la Orden
     @Mapping(target = "customer", source = "user.name")
     @Mapping(target = "restaurant", source = "restaurant.name")
+    @Mapping(target = "employee", source = "employee.name")
     @Mapping(target = "dishes", source = "dishes") // Mapea la lista de detalles
     OrderResponse toOrderResponse(Order order);
 

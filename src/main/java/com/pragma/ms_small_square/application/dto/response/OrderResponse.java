@@ -19,6 +19,7 @@ public class OrderResponse {
     private String state;
     private String customer;
     private String restaurant;
+    private String employee;
     private LocalDateTime creationDate;
     private List<OrderDetailsResponse> dishes;
 }

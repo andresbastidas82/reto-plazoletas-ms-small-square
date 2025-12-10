@@ -23,4 +23,5 @@ public class Order {
     private User user; //cliente del pedido
     private String deliveryCode;
     private List<OrderDetails> dishes;
+    private User employee; //empleado responsable del pedido
 }

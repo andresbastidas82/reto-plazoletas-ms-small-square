@@ -12,4 +12,6 @@ public interface IOrderPersistencePort {
     List<Order> getOrderByUserAndStates(Long userId, List<OrderStateEnum> states, int page, int size);
 
     Page<Order> getOrdersByState(OrderStateEnum state, int page, int size, Long restaurantId);
+
+    Order getOrderById(Long orderId);
 }

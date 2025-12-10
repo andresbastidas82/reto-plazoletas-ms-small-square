@@ -44,4 +44,10 @@ public class OrderHandler implements IOrderHandler {
     public Page<OrderResponse> getOrdersByState(String state, int page, int size) {
         return orderServicePort.getOrdersByState(state, page, size).map(orderRequestMapper::toOrderResponse);
     }
+
+    @Override
+    public OrderResponse assignOrderToEmployee(Long orderId) {
+        Order order = orderServicePort.getOrderById(orderId);
+        return orderRequestMapper.toOrderResponse(orderServicePort.assignOrderToEmployee(order));
+    }
 }

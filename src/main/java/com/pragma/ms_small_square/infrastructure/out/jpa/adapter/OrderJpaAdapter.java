@@ -55,5 +55,10 @@ public class OrderJpaAdapter implements IOrderPersistencePort, IOrderSpecificati
         return orderRepository.findAll(specs, pageable).map(orderEntityMapper::toOrder);
     }
 
+    @Override
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId).map(orderEntityMapper::toOrder).orElse(null);
+    }
+
 
 }
