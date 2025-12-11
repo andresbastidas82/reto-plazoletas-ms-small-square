@@ -12,4 +12,6 @@ public interface IOrderHandler {
     OrderResponse assignOrderToEmployee(Long orderId);
 
     OrderResponse notifyOrderReady(Long orderId);
+
+    OrderResponse deliverOrder(Long orderId, String verificationCode);
 }

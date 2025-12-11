@@ -83,6 +83,18 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.saveOrder(order);
     }
 
+    @Override
+    public Order deliverOrder(Order order, String verificationCode) {
+        if(!order.getState().equals(OrderStateEnum.READY)) {
+            throw new ErrorRequestException("The order is not in ready state");
+        }
+        if (!verificationCode.equals(order.getDeliveryCode())) {
+            throw new ErrorRequestException("Invalid verification code");
+        }
+        order.setState(OrderStateEnum.DELIVERED);
+        return orderPersistencePort.saveOrder(order);
+    }
+
     private User registerCustomer() {
         String nameUserToken = authenticationServicePort.getNameOfToken();
         Long idUserToken = authenticationServicePort.getUserIdOfToken();

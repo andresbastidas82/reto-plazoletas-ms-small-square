@@ -46,4 +46,11 @@ public class OrderController {
     public ResponseEntity<OrderResponse> notifyOrderReady(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderHandler.notifyOrderReady(orderId));
     }
+
+    @PutMapping("/deliver-order/{orderId}")
+    public ResponseEntity<OrderResponse> deliverOrder(
+            @PathVariable Long orderId,
+            @RequestParam String code) {
+        return ResponseEntity.ok(orderHandler.deliverOrder(orderId, code));
+    }
 }

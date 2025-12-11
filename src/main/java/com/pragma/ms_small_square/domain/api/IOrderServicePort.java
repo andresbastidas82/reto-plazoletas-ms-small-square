@@ -17,4 +17,6 @@ public interface IOrderServicePort {
     Order getOrderById(Long orderId);
 
     Order notifyOrderReady(Order order);
+
+    Order deliverOrder(Order order, String verificationCode);
 }
