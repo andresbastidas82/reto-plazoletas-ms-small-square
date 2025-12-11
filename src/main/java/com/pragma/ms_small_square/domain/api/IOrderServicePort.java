@@ -15,4 +15,6 @@ public interface IOrderServicePort {
     Order assignOrderToEmployee(Order order);
 
     Order getOrderById(Long orderId);
+
+    Order notifyOrderReady(Order order);
 }

@@ -10,13 +10,16 @@ import com.pragma.ms_small_square.domain.model.Restaurant;
 import com.pragma.ms_small_square.domain.model.User;
 import com.pragma.ms_small_square.domain.model.enums.OrderStateEnum;
 import com.pragma.ms_small_square.domain.spi.IAuthenticationServicePort;
+import com.pragma.ms_small_square.domain.spi.INotificationClientPort;
 import com.pragma.ms_small_square.domain.spi.IOrderPersistencePort;
+import com.pragma.ms_small_square.domain.spi.IUserClientPort;
 import com.pragma.ms_small_square.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,8 @@ public class OrderUseCase implements IOrderServicePort {
     private final IOrderPersistencePort orderPersistencePort;
     private final IAuthenticationServicePort authenticationServicePort;
     private final IUserPersistencePort userPersistencePort;
+    private final INotificationClientPort notificationClientPort;
+    private final IUserClientPort userClientPort;
 
     @Override
     public Order saveOrder(Restaurant restaurant, List<OrderDetails> dishes) {
@@ -63,6 +68,21 @@ public class OrderUseCase implements IOrderServicePort {
         return order;
     }
 
+    @Override
+    public Order notifyOrderReady(Order order) {
+        if(!order.getState().equals(OrderStateEnum.IN_PREPARATION)) {
+            throw new ErrorRequestException("The order is not in preparation state");
+        }
+        String code = generateSixDigitCode();
+        Boolean resultNotification = sendNotificationOrder(code, order);
+        if (Boolean.FALSE.equals(resultNotification)) {
+            throw new ErrorRequestException("Error sending notification");
+        }
+        order.setDeliveryCode(code);
+        order.setState(OrderStateEnum.READY);
+        return orderPersistencePort.saveOrder(order);
+    }
+
     private User registerCustomer() {
         String nameUserToken = authenticationServicePort.getNameOfToken();
         Long idUserToken = authenticationServicePort.getUserIdOfToken();
@@ -76,5 +96,20 @@ public class OrderUseCase implements IOrderServicePort {
         if (orders != null && !orders.isEmpty()) {
             throw new UserPendingOrdersException("The user has pending orders");
         }
+    }
+
+    private Boolean sendNotificationOrder(String code, Order order) {
+        String phone = userClientPort.getPhoneCustomer(order.getUser().getId());
+        if (phone == null) {
+            throw new ErrorRequestException("Phone number not found");
+        }
+        String message = "Su pedido esta listo! Su pin de seguridad para reclamar el pedido es: " + code;
+        return notificationClientPort.sendNotification(phone, message);
+    }
+
+    private String generateSixDigitCode() {
+        Random random = new Random();
+        int number = random.nextInt(1_000_000); // genera entre 0 y 999999
+        return String.format("%06d", number);   // fuerza 6 dígitos con ceros
     }
 }

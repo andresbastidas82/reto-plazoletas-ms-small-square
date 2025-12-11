@@ -49,7 +49,8 @@ public class SecurityConfig {
 
                         // Rutas para Empleados (EMPLOYEE)
                         .requestMatchers("/api/v1/small-square/orders-by-state").hasRole("EMPLOYEE")
-                        .requestMatchers("/api/v1/small-square/assign-order-to-employee/**").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/v1/small-square/assign-order-to-employee/**").hasAnyRole("EMPLOYEE", "ADMIN", "OWNER")
+                        .requestMatchers("/api/v1/small-square/notify-order-ready/**").hasAnyRole("EMPLOYEE", "ADMIN", "OWNER")
 
                         // Cualquier otra petición requiere que el usuario esté autenticado.
                         .anyRequest().authenticated()
