@@ -62,4 +62,10 @@ public class OrderHandler implements IOrderHandler {
         Order order = orderServicePort.getOrderById(orderId);
         return orderRequestMapper.toOrderResponse(orderServicePort.deliverOrder(order, verificationCode));
     }
+
+    @Override
+    public OrderResponse cancelOrder(Long orderId) {
+        Order order = orderServicePort.getOrderById(orderId);
+        return orderRequestMapper.toOrderResponse(orderServicePort.cancelOrder(order));
+    }
 }

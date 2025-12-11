@@ -16,6 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private static final String ROLE_EMPLOYEE = "EMPLOYEE";
+    private static final String ROLE_OWNER = "OWNER";
+    private static final String ROLE_CUSTOMER = "CUSTOMER";
+    private static final String ROLE_ADMIN = "ADMIN";
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
@@ -38,20 +42,20 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/small-square/get-restaurants").permitAll()
                         .requestMatchers("/api/v1/small-square/dishes-by-restaurant").permitAll()
                         // Rutas para Propietarios (OWNER)
-                        .requestMatchers("/api/v1/small-square/create-restaurant").hasRole("OWNER")
-                        .requestMatchers("/api/v1/small-square/create-dish").hasRole("OWNER")
-                        .requestMatchers("/api/v1/small-square/update-dish/**").hasRole("OWNER")
-                        .requestMatchers("/api/v1/small-square/update-status-dish/**").hasRole("OWNER")
-                        .requestMatchers("/api/v1/small-square/create-order").hasRole("CUSTOMER")
+                        .requestMatchers("/api/v1/small-square/create-restaurant").hasRole(ROLE_OWNER)
+                        .requestMatchers("/api/v1/small-square/create-dish").hasRole(ROLE_OWNER)
+                        .requestMatchers("/api/v1/small-square/update-dish/**").hasRole(ROLE_OWNER)
+                        .requestMatchers("/api/v1/small-square/update-status-dish/**").hasRole(ROLE_OWNER)
 
                         // Rutas para Clientes (CLIENT)
-                        .requestMatchers("/api/v1/dish/list-by-restaurant/**").hasRole("CLIENT")
+                        .requestMatchers("/api/v1/small-square/create-order").hasRole(ROLE_CUSTOMER)
+                        .requestMatchers("/api/v1/small-square/cancel-order/*").hasRole(ROLE_CUSTOMER)
 
                         // Rutas para Empleados (EMPLOYEE)
-                        .requestMatchers("/api/v1/small-square/orders-by-state").hasRole("EMPLOYEE")
-                        .requestMatchers("/api/v1/small-square/assign-order-to-employee/**").hasAnyRole("EMPLOYEE", "ADMIN", "OWNER")
-                        .requestMatchers("/api/v1/small-square/notify-order-ready/**").hasAnyRole("EMPLOYEE", "ADMIN", "OWNER")
-                        .requestMatchers("/api/v1/small-square/deliver-order/**").hasAnyRole("EMPLOYEE", "ADMIN", "OWNER")
+                        .requestMatchers("/api/v1/small-square/orders-by-state").hasRole(ROLE_EMPLOYEE)
+                        .requestMatchers("/api/v1/small-square/assign-order-to-employee/**").hasAnyRole(ROLE_EMPLOYEE, ROLE_ADMIN, ROLE_OWNER)
+                        .requestMatchers("/api/v1/small-square/notify-order-ready/**").hasAnyRole(ROLE_EMPLOYEE, ROLE_ADMIN, ROLE_OWNER)
+                        .requestMatchers("/api/v1/small-square/deliver-order/**").hasAnyRole(ROLE_EMPLOYEE, ROLE_ADMIN, ROLE_OWNER)
 
                         // Cualquier otra petición requiere que el usuario esté autenticado.
                         .anyRequest().authenticated()

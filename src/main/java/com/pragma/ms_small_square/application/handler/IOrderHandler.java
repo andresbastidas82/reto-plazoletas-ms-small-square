@@ -14,4 +14,6 @@ public interface IOrderHandler {
     OrderResponse notifyOrderReady(Long orderId);
 
     OrderResponse deliverOrder(Long orderId, String verificationCode);
+
+    OrderResponse cancelOrder(Long orderId);
 }

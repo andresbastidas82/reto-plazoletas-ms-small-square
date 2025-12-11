@@ -19,4 +19,6 @@ public interface IOrderServicePort {
     Order notifyOrderReady(Order order);
 
     Order deliverOrder(Order order, String verificationCode);
+
+    Order cancelOrder(Order order);
 }
