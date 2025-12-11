@@ -10,4 +10,6 @@ public interface IOrderHandler {
     Page<OrderResponse> getOrdersByState(String state, int page, int size);
 
     OrderResponse assignOrderToEmployee(Long orderId);
+
+    OrderResponse notifyOrderReady(Long orderId);
 }

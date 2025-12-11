@@ -34,4 +34,10 @@ public class UserClientAdapter implements IUserClientPort {
         UserResponse userResponse = getUserById(userId);
         return userResponse != null && userResponse.getRole().equalsIgnoreCase("OWNER");
     }
+
+    @Override
+    public String getPhoneCustomer(Long customerId) {
+        UserResponse userResponse = getUserById(customerId);
+        return userResponse != null && userResponse.getCellphone() != null ? userResponse.getCellphone() : null;
+    }
 }
