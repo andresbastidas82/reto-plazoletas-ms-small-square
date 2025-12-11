@@ -12,6 +12,7 @@ public enum OrderStateEnum {
     PENDING("Pendiente"),
     IN_PREPARATION("En preparación"),
     READY("Listo"),
+    CANCELED("Cancelado"),
     DELIVERED("Entregado");
 
     private final String description;

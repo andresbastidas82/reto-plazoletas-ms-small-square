@@ -95,6 +95,18 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.saveOrder(order);
     }
 
+    @Override
+    public Order cancelOrder(Order order) {
+        if(order.getState().equals(OrderStateEnum.CANCELED)) {
+            throw new ErrorRequestException("The order is already canceled");
+        }
+        if(!order.getState().equals(OrderStateEnum.PENDING)) {
+            throw new ErrorRequestException("Lo sentimos, tu pedido ya está en preparación y no puede cancelarse");
+        }
+        order.setState(OrderStateEnum.CANCELED);
+        return orderPersistencePort.saveOrder(order);
+    }
+
     private User registerCustomer() {
         String nameUserToken = authenticationServicePort.getNameOfToken();
         Long idUserToken = authenticationServicePort.getUserIdOfToken();
