@@ -12,6 +12,7 @@ import com.pragma.ms_small_square.domain.model.enums.OrderStateEnum;
 import com.pragma.ms_small_square.domain.spi.IAuthenticationServicePort;
 import com.pragma.ms_small_square.domain.spi.INotificationClientPort;
 import com.pragma.ms_small_square.domain.spi.IOrderPersistencePort;
+import com.pragma.ms_small_square.domain.spi.ITraceabilityClientPort;
 import com.pragma.ms_small_square.domain.spi.IUserClientPort;
 import com.pragma.ms_small_square.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class OrderUseCase implements IOrderServicePort {
     private final IUserPersistencePort userPersistencePort;
     private final INotificationClientPort notificationClientPort;
     private final IUserClientPort userClientPort;
+    private final ITraceabilityClientPort traceabilityClientPort;
 
     @Override
     public Order saveOrder(Restaurant restaurant, List<OrderDetails> dishes) {
@@ -39,7 +41,9 @@ public class OrderUseCase implements IOrderServicePort {
         order.setDishes(dishes);
         order.setState(OrderStateEnum.PENDING);
         order.setUser(registerCustomer());
-        return orderPersistencePort.saveOrder(order);
+        Order newOrder = orderPersistencePort.saveOrder(order);
+        traceabilityClientPort.saveTraceability(newOrder, "NEW", OrderStateEnum.PENDING.name());
+        return newOrder;
     }
 
     @Override
@@ -56,7 +60,9 @@ public class OrderUseCase implements IOrderServicePort {
         }
         order.setEmployee(registerCustomer());
         order.setState(OrderStateEnum.IN_PREPARATION);
-        return orderPersistencePort.saveOrder(order);
+        Order orderUpdate = orderPersistencePort.saveOrder(order);
+        traceabilityClientPort.saveTraceability(orderUpdate, OrderStateEnum.PENDING.name(), OrderStateEnum.IN_PREPARATION.name());
+        return orderUpdate;
     }
 
     @Override
@@ -80,7 +86,9 @@ public class OrderUseCase implements IOrderServicePort {
         }
         order.setDeliveryCode(code);
         order.setState(OrderStateEnum.READY);
-        return orderPersistencePort.saveOrder(order);
+        Order orderUpdate = orderPersistencePort.saveOrder(order);
+        traceabilityClientPort.saveTraceability(orderUpdate, OrderStateEnum.IN_PREPARATION.name(), OrderStateEnum.READY.name());
+        return orderUpdate;
     }
 
     @Override
@@ -92,7 +100,9 @@ public class OrderUseCase implements IOrderServicePort {
             throw new ErrorRequestException("Invalid verification code");
         }
         order.setState(OrderStateEnum.DELIVERED);
-        return orderPersistencePort.saveOrder(order);
+        Order orderUpdate = orderPersistencePort.saveOrder(order);
+        traceabilityClientPort.saveTraceability(orderUpdate, OrderStateEnum.READY.name(), OrderStateEnum.DELIVERED.name());
+        return orderUpdate;
     }
 
     @Override
@@ -104,7 +114,9 @@ public class OrderUseCase implements IOrderServicePort {
             throw new ErrorRequestException("Lo sentimos, tu pedido ya está en preparación y no puede cancelarse");
         }
         order.setState(OrderStateEnum.CANCELED);
-        return orderPersistencePort.saveOrder(order);
+        Order orderUpdate = orderPersistencePort.saveOrder(order);
+        traceabilityClientPort.saveTraceability(orderUpdate, OrderStateEnum.PENDING.name(), OrderStateEnum.CANCELED.name());
+        return orderUpdate;
     }
 
     private User registerCustomer() {
